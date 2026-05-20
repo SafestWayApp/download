@@ -61,7 +61,7 @@
 
   <script type="module">
     import { initializeApp } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-app.js';
-    import { getFirestore, addDoc, collection } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-firestore.js';
+    import { getAnalytics, logEvent } from 'https://www.gstatic.com/firebasejs/11.3.1/firebase-analytics.js';
 
     const app = initializeApp({
       apiKey:            "AIzaSyA2VoCXZIADecKUNpE1wyuKWWDc4ROQiKE",
@@ -72,7 +72,7 @@
       appId:             "1:886273374564:web:22aea05f4b30062c066271",
       measurementId:     "G-4PYVKSJBVE",
     });
-    const db = getFirestore(app);
+    const analytics = getAnalytics(app);
 
     const APPLE_URL   = 'https://apps.apple.com/gb/app/safest-way/id6502523910';
     const ANDROID_URL = 'https://play.google.com/store/apps/details?id=com.safestway';
@@ -85,10 +85,7 @@
     function logAndRedirect(platform, url) {
       document.getElementById('status').textContent =
         platform === 'ios' ? 'Redirecting to the App Store...' : 'Redirecting to Google Play...';
-      addDoc(collection(db, 'redirects'), {
-        platform,
-        ts: new Date().toISOString(),
-      }).catch(() => {});
+      try { logEvent(analytics, 'store_redirect', { platform }); } catch (e) {}
       window.location.href = url;
     }
 
