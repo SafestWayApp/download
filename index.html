@@ -82,15 +82,13 @@
     const isIOS     = /iPad|iPhone|iPod/.test(ua) ||
                       (ua.includes('Mac') && 'ontouchend' in document);
 
-    async function logAndRedirect(platform, url) {
+    function logAndRedirect(platform, url) {
       document.getElementById('status').textContent =
         platform === 'ios' ? 'Redirecting to the App Store...' : 'Redirecting to Google Play...';
-      try {
-        await addDoc(collection(db, 'redirects'), {
-          platform,
-          ts: new Date().toISOString(),
-        });
-      } catch (e) { /* don't block the redirect if logging fails */ }
+      addDoc(collection(db, 'redirects'), {
+        platform,
+        ts: new Date().toISOString(),
+      }).catch(() => {});
       window.location.href = url;
     }
 
