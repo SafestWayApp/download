@@ -85,7 +85,7 @@
     function logAndRedirect(platform, url) {
       document.getElementById('status').textContent =
         platform === 'ios' ? 'Redirecting to the App Store...' : 'Redirecting to Google Play...';
-      try { logEvent(analytics, 'store_redirect', { platform }); } catch (e) {}
+      try { logEvent(analytics, 'invite_friend_share_link', { platform }); } catch (e) {}
       window.location.href = url;
     }
 
